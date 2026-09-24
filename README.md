@@ -8,7 +8,7 @@ Import `inputs.system-config.homeManagerModules.neovim` into Home Manager. The m
 
 The importing configuration supplies `pkgs`. This configuration currently uses my patched nixpkgs and public `nur-packages` overlay; it is not intended to work with arbitrary stock nixpkgs. In particular, the Treesitter configuration includes Plumb and Djot grammars. This flake exports the prepared package set as `legacyPackages.x86_64-linux`; importing the module elsewhere still uses the caller's package set.
 
-For NixOS configurations that also use the Neovim options at the system level, import `inputs.system-config.nixosModules.neovim-options` into NixOS and the Home Manager module into `home-manager.sharedModules`.
+The shared option definitions are aggregated in `modules/options.nix`; this module declares options only, without configuring system services. NixOS and Home Manager still have separate option values. For NixOS configurations that also use these options at the system level, import `inputs.system-config.nixosModules.nixos-options` into NixOS and the Home Manager module into `home-manager.sharedModules`.
 
 Plugin settings, keybindings, and Lua configuration are preserved from `sync`. Language-specific modules remain there for now. Sidekick expects `codex-wrapper` and Zellij on PATH; Pandoc conversion expects Pandoc. Those integrations require the corresponding tools from the consuming environment. The archived commit prompt and snippets are retained as files without adding new activation behavior.
 

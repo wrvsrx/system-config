@@ -31,7 +31,7 @@
         neovim = ./modules/neovim/home.nix;
         default = self.homeManagerModules.neovim;
       };
-      nixosModules.neovim-options = ./modules/neovim/options.nix;
+      nixosModules.nixos-options = ./modules/options.nix;
 
       legacyPackages.${system} = pkgs;
 

@@ -1,0 +1,3 @@
+{
+  imports = [ ./neovim/options.nix ];
+}
