@@ -1,0 +1,50 @@
+{
+  "definition": {
+    "prefix": ["definition"],
+    "body": [
+      "::: {.definition}",
+      "$1",
+      ":::"
+    ]
+  },
+  "theorem": {
+    "prefix": ["theorem"],
+    "body": [
+      "::: {.theorem}",
+      "$1",
+      ":::"
+    ]
+  },
+  "algorithm": {
+    "prefix": ["algorithm"],
+    "body": [
+      "::: {.algorithm}",
+      "$1",
+      ":::"
+    ]
+  },
+  "remark": {
+    "prefix": ["remark"],
+    "body": [
+      "::: {.remark}",
+      "$1",
+      ":::"
+    ]
+  },
+  "proof": {
+    "prefix": ["proof"],
+    "body": [
+      "::: {.proof}",
+      "$1",
+      ":::"
+    ]
+  },
+  "example": {
+    "prefix": ["example"],
+    "body": [
+      "::: {.example}",
+      "$1",
+      ":::"
+    ]
+  }
+}
