@@ -1,0 +1,75 @@
+// Reserve Alt mode keys, including those used by default pane shortcuts.
+keybinds {
+    unbind "Ctrl g" "Ctrl p" "Ctrl n" "Ctrl h" "Ctrl t" "Ctrl s" "Ctrl o" "Ctrl b"
+    unbind "Alt g" "Alt h" "Alt j" "Alt k" "Alt l" "Alt m" "Alt p" "Alt n" "Alt t" "Alt s" "Alt o" "Alt b"
+    shared_except "locked" {
+        unbind "Ctrl q"
+        bind "Alt q" { Quit; }
+    }
+    shared_except "locked" {
+        bind "Alt g" { SwitchToMode "Locked"; }
+    }
+    locked {
+        bind "Alt g" { SwitchToMode "Normal"; }
+    }
+    shared_except "pane" "locked" {
+        bind "Alt p" { SwitchToMode "Pane"; }
+    }
+    pane {
+        bind "Alt p" { SwitchToMode "Normal"; }
+    }
+    shared_except "resize" "locked" {
+        bind "Alt n" { SwitchToMode "Resize"; }
+    }
+    resize {
+        bind "Alt n" { SwitchToMode "Normal"; }
+    }
+    shared_except "move" "locked" {
+        bind "Alt m" { SwitchToMode "Move"; }
+    }
+    move {
+        bind "Alt m" { SwitchToMode "Normal"; }
+        bind "Alt h" { MovePane "Left"; }
+        bind "Alt j" { MovePane "Down"; }
+        bind "Alt k" { MovePane "Up"; }
+        bind "Alt l" { MovePane "Right"; }
+        bind "Alt i" { MoveTab "Left"; }
+        bind "Alt o" { MoveTab "Right"; }
+    }
+    shared_except "move" "locked" {
+        bind "Alt h" { MoveFocusOrTab "Left"; }
+        bind "Alt j" { MoveFocus "Down"; }
+        bind "Alt k" { MoveFocus "Up"; }
+        bind "Alt l" { MoveFocusOrTab "Right"; }
+    }
+    shared_except "tab" "locked" {
+        bind "Alt t" { SwitchToMode "Tab"; }
+    }
+    tab {
+        bind "Alt t" { SwitchToMode "Normal"; }
+    }
+    shared_except "scroll" "locked" {
+        bind "Alt s" { SwitchToMode "Scroll"; }
+    }
+    scroll {
+        bind "Alt s" { SwitchToMode "Normal"; }
+    }
+    shared_except "session" "locked" {
+        bind "Alt o" { SwitchToMode "Session"; }
+    }
+    session {
+        bind "Alt o" { SwitchToMode "Normal"; }
+    }
+    shared_except "tmux" "locked" {
+        bind "Alt b" { SwitchToMode "Tmux"; }
+    }
+    tmux {
+        bind "Alt b" { SwitchToMode "Normal"; }
+    }
+    search {
+        bind "Alt s" { SwitchToMode "Normal"; }
+    }
+    shared_among "scroll" "search" {
+        bind "Ctrl b" { PageScrollUp; }
+    }
+}

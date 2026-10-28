@@ -15,6 +15,7 @@ outputs = inputs:
         development.features = {
           neovim.enable = true;
           rust.enable = true;
+          zellij.enable = true;
         };
         minimal = { };
       };
@@ -38,7 +39,7 @@ outputs = inputs:
 
 `configuration.nix` supplies the host platform, hardware, user account, package set, and state versions. The Home Manager user also needs its normal identity/state-version settings.
 
-Importing `flakeModules.default` declares the profile container. Each named profile has its own module evaluation and defaults all features to disabled. The outputs are deferred modules, not evaluated NixOS systems or HM activation packages. Hosts consume them using `imports`; this profile layer does not automatically create users or wire HM into NixOS. Both current features contribute to HM; the NixOS output is empty until system features are added.
+Importing `flakeModules.default` declares the profile container. Each named profile has its own module evaluation and defaults all features to disabled. The outputs are deferred modules, not evaluated NixOS systems or HM activation packages. Hosts consume them using `imports`; this profile layer does not automatically create users or wire HM into NixOS. All current features contribute to HM; the NixOS output is empty until system features are added.
 
 Profiles support normal module composition and priorities:
 
@@ -62,6 +63,8 @@ Rust contributes `vim.lsp.enable('rust_analyzer')` to the profile's Neovim exten
 All feature definitions are loaded before evaluating feature conditions. Their contributions are guarded with `mkIf`; do not select `imports` using `config` from that same evaluation.
 
 Packages and runtime paths are resolved inside the generated HM module using the consuming environment's `pkgs` and `config.xdg.cacheHome`. Profile Lua text is platform-independent; package-dependent future extensions should defer rendering until the target package set is available.
+
+Zellij is selected independently with `features.zellij.enable`; it preserves the mouse setting and custom keybindings from sync. Enable it alongside Neovim when using Sidekick's Zellij backend.
 
 ## Migration boundary
 

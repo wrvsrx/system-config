@@ -4,6 +4,7 @@
   imports = [
     ./neovim/default.nix
     ./rust/default.nix
+    ./zellij/default.nix
   ];
 
   options.outputs = {
