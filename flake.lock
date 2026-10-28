@@ -115,6 +115,10 @@
     },
     "root": {
       "inputs": {
+        "flake-parts": [
+          "nur-wrvsrx",
+          "flake-parts"
+        ],
         "home-manager": "home-manager",
         "nixpkgs": [
           "nur-wrvsrx",

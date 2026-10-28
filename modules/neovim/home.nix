@@ -10,7 +10,7 @@ in
 {
   imports = [ ./options.nix ];
 
-  config = lib.mkIf cfg.enable {
+  config = {
     home.packages = with pkgs; [
       nodejs
       efm-langserver
