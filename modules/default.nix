@@ -1,8 +1,14 @@
-# Import into the consumer's flake-parts evaluation to register features.
-{ inputs, ... }:
+{ lib, ... }:
 {
-  imports = [
-    inputs.flake-parts.flakeModules.modules
-    ./neovim/default.nix
-  ];
+  options.system-config.profiles = lib.mkOption {
+    default = { };
+    description = "Independent feature configurations producing NixOS and Home Manager modules.";
+    type = lib.types.attrsOf (
+      lib.types.submoduleWith {
+        class = "system-config-profile";
+        modules = [ ./profile.nix ];
+        shorthandOnlyDefinesConfig = false;
+      }
+    );
+  };
 }

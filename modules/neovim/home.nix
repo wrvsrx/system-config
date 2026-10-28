@@ -1,3 +1,4 @@
+{ lspConfig }:
 {
   config,
   pkgs,
@@ -235,6 +236,7 @@ in
             vim.lsp.codelens.enable()
 
             -- Custom LSP configuration from other modules
+            ${lspConfig}
             ${cfg.lspConfig}
           '';
         }
