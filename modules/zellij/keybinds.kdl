@@ -1,7 +1,9 @@
-// Reserve Alt mode keys, including those used by default pane shortcuts.
+// Global unbinds run after mode bindings in Zellij 0.46; only unbind unused keys here.
 keybinds {
-    unbind "Ctrl g" "Ctrl p" "Ctrl n" "Ctrl h" "Ctrl t" "Ctrl s" "Ctrl o" "Ctrl b"
-    unbind "Alt g" "Alt h" "Alt j" "Alt k" "Alt l" "Alt m" "Alt p" "Alt n" "Alt t" "Alt s" "Alt o" "Alt b"
+    unbind "Ctrl g" "Ctrl p" "Ctrl n" "Ctrl h" "Ctrl t" "Ctrl s" "Ctrl o"
+    shared_except "scroll" "search" {
+        unbind "Ctrl b"
+    }
     shared_except "locked" {
         unbind "Ctrl q"
         bind "Alt q" { Quit; }
@@ -10,6 +12,7 @@ keybinds {
         bind "Alt g" { SwitchToMode "Locked"; }
     }
     locked {
+        unbind "Alt h" "Alt j" "Alt k" "Alt l" "Alt m" "Alt p" "Alt n" "Alt t" "Alt s" "Alt o" "Alt b"
         bind "Alt g" { SwitchToMode "Normal"; }
     }
     shared_except "pane" "locked" {
