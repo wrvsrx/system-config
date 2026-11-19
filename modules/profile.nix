@@ -5,6 +5,14 @@
     ./neovim/default.nix
     ./rust/default.nix
     ./zellij/default.nix
+    ./cpp/default.nix
+    ./haskell/default.nix
+    ./json/default.nix
+    ./latex/default.nix
+    ./lua/default.nix
+    ./nix/default.nix
+    ./plumb/default.nix
+    ./python/default.nix
   ];
 
   options.outputs = {

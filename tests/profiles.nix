@@ -5,6 +5,19 @@
   home-manager,
 }:
 let
+  languages = [
+    "cpp"
+    "haskell"
+    "json"
+    "latex"
+    "lua"
+    "nix"
+    "plumb"
+    "python"
+  ];
+  languageFeatures = lib.genAttrs languages (_: {
+    enable = true;
+  });
   profiles =
     (lib.evalModules {
       modules = [
@@ -23,6 +36,10 @@ let
                 enable = true;
                 lspConfig = lib.mkAfter "-- after-rust";
               };
+            };
+            languages.features = languageFeatures;
+            languagesEditor.features = languageFeatures // {
+              neovim.enable = true;
             };
             overridden = {
               imports = [ { features.rust.enable = lib.mkDefault true; } ];
@@ -83,7 +100,35 @@ let
           "claude"
           "dsh"
         ];
-    noLegacyRustOption = !(homes.rust ? my_config);
+    noLegacyOptions = builtins.all (home: !(home ? my_config)) (builtins.attrValues homes);
+    languagesDoNotEnableEditor =
+      !homes.languages.programs.neovim.enable && builtins.elem pkgs.texlab homes.languages.home.packages;
+    languageExtensionsRunInPlugin =
+      builtins.all (lua: lib.hasInfix lua (lspPlugin homes.languagesEditor).config)
+        [
+          "vim.lsp.enable('clangd')"
+          "vim.lsp.enable('hls')"
+          "vim.lsp.enable('jsonls')"
+          "vim.lsp.enable('texlab')"
+          "vim.lsp.enable('lua_ls')"
+          "vim.lsp.enable('nil_ls')"
+          "require('plumb').setup"
+          "vim.lsp.enable('basedpyright')"
+        ];
+    plumbPluginFollowsEditor =
+      let
+        hasPlumb =
+          home: builtins.any (p: (p.plugin or p) == pkgs.vimPlugins.plumb-nvim) home.programs.neovim.plugins;
+      in
+      hasPlumb homes.languagesEditor && !hasPlumb homes.languages;
+    languageFilesUseTargetHome =
+      homes.languages.home.sessionVariables.PYTHONSTARTUP == "/home/test/custom-cache/python/pythonrc"
+      && homes.languages.xdg.configFile ? "cabal/config"
+      && builtins.all (agent: homes.languages.home.file ? ".${agent}/skills/plumb-markup") [
+        "codex"
+        "claude"
+        "dsh"
+      ];
     generatedNixosModuleWorks =
       (lib.evalModules {
         modules = [ profiles.development.outputs.nixos ];

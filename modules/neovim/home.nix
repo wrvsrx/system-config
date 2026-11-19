@@ -5,12 +5,7 @@
   lib,
   ...
 }:
-let
-  cfg = config.my_config.neovim;
-in
 {
-  imports = [ ./options.nix ];
-
   config = {
     home.packages = with pkgs; [
       nodejs
@@ -237,7 +232,6 @@ in
 
             -- Custom LSP configuration from other modules
             ${lspConfig}
-            ${cfg.lspConfig}
           '';
         }
         # Show available LSP code actions in the sign column

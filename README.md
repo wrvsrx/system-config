@@ -16,6 +16,7 @@ outputs = inputs:
           neovim.enable = true;
           rust.enable = true;
           zellij.enable = true;
+          python.enable = true;
         };
         minimal = { };
       };
@@ -57,8 +58,16 @@ The imported file can set `features.rust.enable = lib.mkDefault true`. Reuse pro
 - `features.neovim.enable`: personal editor configuration, plugins, keybindings, and Lua assets.
 - `features.neovim.lspConfig`: mergeable Lua text executed inside the nvim-lspconfig plugin configuration after common LSP setup. Contributions use standard `mkBefore`/`mkAfter` ordering within this option.
 - `features.rust.enable`: Cargo, rustc, rust-analyzer, sccache, cache environment variables, and the rust-worktree-sccache skill for Codex, Claude, and dsh.
+- `features.cpp.enable`: LLVM 18 clang and clang-tools, gdb, clangd, and Meson formatting through efm.
+- `features.haskell.enable`: GHC with common libraries, haskell-language-server using fourmolu, and an XDG-relocated cabal config.
+- `features.json.enable`: vscode-json-languageserver.
+- `features.latex.enable`: texlab.
+- `features.lua.enable`: lua-language-server.
+- `features.nix.enable`: nil with nixfmt formatting.
+- `features.plumb.enable`: the plumb CLI, the plumb-markup skill for Codex, Claude, and dsh, and plumb.nvim with Snacks pickers when Neovim is selected.
+- `features.python.enable`: Python with common libraries, basedpyright, ruff (formatting only), and an XDG-relocated history startup file.
 
-Rust contributes `vim.lsp.enable('rust_analyzer')` to the profile's Neovim extension. Neovim consumes it only when enabled in that profile. Rust alone does not enable the editor; Neovim alone does not install Rust. Neither feature reads `osConfig` or mirrors NixOS feature options into HM.
+Each language feature contributes its LSP setup to the profile's Neovim extension; Rust, for example, contributes `vim.lsp.enable('rust_analyzer')`. Neovim consumes these only when enabled in that profile. A language alone does not enable the editor; Neovim alone does not install any language. Plumb also adds plumb.nvim to the editor's plugins only when Neovim is selected in the same profile. No feature reads `osConfig` or mirrors NixOS feature options into HM.
 
 All feature definitions are loaded before evaluating feature conditions. Their contributions are guarded with `mkIf`; do not select `imports` using `config` from that same evaluation.
 
@@ -70,17 +79,17 @@ Zellij is selected independently with `features.zellij.enable`; it preserves the
 
 The former `flake.modules.homeManager.neovim` selection interface is replaced by profiles. Earlier `homeManagerModules` and `nixosModules.nixos-options` interfaces remain removed.
 
-The Neovim implementation temporarily declares the HM option `my_config.neovim.lspConfig` for unmigrated language modules in `sync`. Its text runs after the profile-level LSP text at the same plugin configuration location. New features should use `features.neovim.lspConfig` inside profiles. Remove the bridge after the remaining languages migrate. There is no HM or NixOS Rust feature switch.
+The temporary HM option `my_config.neovim.lspConfig` has been removed now that the language modules from `sync` are profile features. Contribute LSP setup through `features.neovim.lspConfig` inside profiles. There are no HM or NixOS language feature switches.
 
 ## Packages and external tools
 
-The consuming environment must supply the patched nixpkgs and public `nur-packages` overlay, including Plumb and Djot Treesitter grammars. Selecting a feature does not replace its package set.
+The consuming environment must supply the patched nixpkgs and public `nur-packages` overlay, including Plumb, plumb.nvim, and Djot Treesitter grammars. Selecting a feature does not replace its package set.
 
 This flake retains `legacyPackages.x86_64-linux`, `packages.x86_64-linux.home-manager`, and `formatter.x86_64-linux`. Sidekick expects `codex-wrapper` and Zellij on PATH; Pandoc conversion expects Pandoc. These tools remain the consumer's responsibility.
 
 ## Validation
 
-The profile tests evaluate real HM configurations for empty, Rust-only, editor-only, combined, and overridden profiles. They check isolation, extension ordering and placement, target paths, and skill installation without building or activating a system:
+The profile tests evaluate real HM configurations for empty, Rust-only, editor-only, combined, languages-only, languages-with-editor, and overridden profiles. They check isolation, extension ordering and placement, target paths, and skill installation without building or activating a system:
 
 ```sh
 nix eval --impure --json --expr '
